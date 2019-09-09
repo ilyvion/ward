@@ -4,6 +4,7 @@
 //! creating a variable.
 
 /// Returns the contents of a `Option<T>`'s `Some(T)`, otherwise it returns early from the function.
+/// Can also be used with other "early returns" like `break` or `continue`.
 ///
 /// # Examples
 /// ```
@@ -43,27 +44,44 @@
 /// # #[macro_use] extern crate ward;
 /// #
 /// # fn main() {
+/// // You can use ward! with a different "early return" statement, such as `break` for loops
+/// let mut sut = Some(0);
+/// loop {
+///     let res = ward!(sut, break);
+///     sut = if res < 5 {
+///         Some(res + 1)
+///     } else {
+///         None
+///     }
+/// }
+/// assert_eq!(sut, None);
+/// # }
+/// ```
+/// ```
+/// # #[macro_use] extern crate ward;
+/// #
+/// # fn main() {
 /// // Unlike guard!, ward! can be used as an expression
 /// let sut = Some("test");
 /// print(ward!(sut));
-/// # }
 ///
 /// fn print(text: &str) {
 ///     println!("{}", text);
 /// }
+/// # }
 /// ```
 #[macro_export]
 macro_rules! ward {
-    ($o:expr) => {
-        if let Some(x) = $o { x } else { return; };
+    ($o:expr) => ($crate::ward!($o, else {}));
+    ($o:expr, else $body:block) => ($crate::ward!($o, else $body, return));
+    ($o:expr, else $body:block, $early:stmt) => {
+        if let Some(x) = $o { x } else { $body; $early; };
     };
-    ($o:expr, else $body:block) => {
-        if let Some(x) = $o { x } else { $body; return; };
-    };
+    ($o:expr, $early:stmt) => ($crate::ward!($o, else {}, $early));
 }
 
 /// Creates a variable with the contents of a `Option<T>`'s `Some(T)`, otherwise it returns early
-/// from the function.
+/// from the function. Can also be used with other "early returns" like `break` or `continue`.
 ///
 /// # Examples
 /// ```
@@ -76,7 +94,6 @@ macro_rules! ward {
 /// assert_eq!("test", res);
 /// # }
 /// ```
-///
 /// ```
 /// # #[macro_use] extern crate ward;
 /// #
@@ -87,7 +104,6 @@ macro_rules! ward {
 /// unreachable!();
 /// # }
 /// ```
-///
 /// ```
 /// # #[macro_use] extern crate ward;
 /// #
@@ -101,20 +117,41 @@ macro_rules! ward {
 /// unreachable!();
 /// # }
 /// ```
+/// ```
+/// # #[macro_use] extern crate ward;
+/// #
+/// # fn main() {
+/// // You can use guard! with a different "early return" statement, such as `break` for loops
+/// let mut sut = Some(0);
+/// loop {
+///     guard!(let res = sut, break);
+///     sut = if res < 5 {
+///         Some(res + 1)
+///     } else {
+///         None
+///     }
+/// }
+/// assert_eq!(sut, None);
+/// # }
+/// ```
 #[macro_export]
 macro_rules! guard {
-    (let $result:ident = $o:expr) => {
-        let $result = ward!($o);
-    };
+    (let $result:ident = $o:expr) => ($crate::guard!(let $result = $o, else {}));
     (let $result:ident = $o:expr, else $body:block) => {
         let $result = ward!($o, else $body);
     };
-    (let mut $result:ident = $o:expr) => {
-        let mut $result = ward!($o);
+    (let $result:ident = $o:expr, else $body:block, $early:stmt) => {
+        let $result = ward!($o, else $body, $early);
     };
+    (let $result:ident = $o:expr, $early:stmt) => ($crate::guard!(let $result = $o, else {}, $early));
+    (let mut $result:ident = $o:expr) =>  ($crate::guard!(let mut $result = $o, else {}));
     (let mut $result:ident = $o:expr, else $body:block) => {
         let mut $result = ward!($o, else $body);
     };
+    (let mut $result:ident = $o:expr, else $body:block, $early:stmt) => {
+        let mut $result = ward!($o, else $body, $early);
+    };
+    (let mut $result:ident = $o:expr, $early:stmt) => ($crate::guard!(let $result = $o, else {}, $early));
 }
 
 #[cfg(test)]

@@ -34,3 +34,19 @@ guard!(let _res = sut, else {
 });
 unreachable!();
 ```
+
+Both macros also support an alternative "early return statement", which will let you e.g. `break` in loops:
+
+```rust
+// Not that you couldn't (and probably should) do this case with `while let Some(res) = sut`...
+let mut sut = Some(0);
+loop {
+    let res = ward!(sut, break);
+    sut = if res < 5 {
+        Some(res + 1)
+    } else {
+        None
+    }
+}
+assert_eq!(sut, None);
+```
