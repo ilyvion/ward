@@ -1,0 +1,11 @@
+[package]
+name = "ward"
+version = "1.0.0"
+authors = ["Alexander Krivács Schrøder <alexschrod@gmail.com>"]
+edition = "2018"
+license = "MIT"
+description = "Provides a ward! macro which returns the contents of an Option<T> and otherwise returns early, and a guard! macro, which does the same, but with a syntax more similar to Swift's guard syntax"
+homepage = "https://github.com/alexschrod/ward"
+repository = "https://github.com/alexschrod/ward"
+
+[dependencies]
