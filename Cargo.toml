@@ -9,6 +9,5 @@ repository = "https://github.com/alexschrod/ward"
 readme = "README.md"
 keywords = ["swift", "guard"]
 categories = ["rust-patterns"]
-documentation = "https://docs.rs/ward"
 
 [dependencies]
