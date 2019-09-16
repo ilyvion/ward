@@ -1,5 +1,10 @@
 # ward
 
+[![Crates.io](https://img.shields.io/crates/v/ward)](https://crates.io/crates/ward)
+[![Crates.io](https://img.shields.io/crates/l/ward)](https://crates.io/crates/ward)
+[![Crates.io](https://img.shields.io/crates/d/ward)](https://crates.io/crates/ward)
+[![Docs.io](https://docs.rs/ward/badge.svg)](https://docs.rs/ward)
+
 This crate exports two macros, which are intended to replicate the functionality of Swift's
 guard expression with `Option<T>`.
 
