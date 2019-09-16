@@ -1,6 +1,6 @@
 [package]
 name = "ward"
-version = "2.0.0"
+version = "2.1.0"
 authors = ["Alexander Krivács Schrøder <alexschrod@gmail.com>"]
 edition = "2018"
 license = "MIT"

@@ -1,3 +1,5 @@
+#![no_std]
+
 //! This crate exports two macros, which are intended to replicate the functionality of Swift's
 //! guard expression with `Option<T>`.
 //!
